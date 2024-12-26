@@ -16,7 +16,7 @@ Why This Tool Doesn't Obfuscate Itself
 We know some of you like to add extra layers of "mystery" to your code. You know, the kind of mystery that involves renaming variables to things like a1, x4, or var10_999. But here’s the thing: obfuscation is for people who want to hide what they're doing. If you’re proud of your work (like we are), you shouldn’t need to obfuscate it.
 
 This tool is 100% transparent. It's easy to understand, easy to extend, and easy to use. Don’t hide behind unnecessary tricks. Just because you can obfuscate code, doesn’t mean you should. We believe in writing code that even your grandmother could understand (well, as long as she's into network security).
-
+#
 Installation
 Step 1: Set up a Virtual Environment
 
@@ -37,13 +37,13 @@ source venv/bin/activate
 Windows:
 
         .\venv\Scripts\activate
-
+#
 Step 2: Install Required Dependencies
 
 Once your virtual environment is activated, install the necessary dependencies by running:
 
-pip install requests beautifulsoup4 re time webbrowser json threading
-
+    pip install requests beautifulsoup4 re time webbrowser json threading
+#
 For verbose mode or additional libraries, you might want to install subprocess if not already available (typically built into Python, but worth mentioning if you're having issues).
 python ipcamdorking.py
 
