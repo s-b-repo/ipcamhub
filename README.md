@@ -18,21 +18,22 @@ We know some of you like to add extra layers of "mystery" to your code. You know
 This tool is 100% transparent. It's easy to understand, easy to extend, and easy to use. Don’t hide behind unnecessary tricks. Just because you can obfuscate code, doesn’t mean you should. We believe in writing code that even your grandmother could understand (well, as long as she's into network security).
 #
 Installation
+
 Step 1: Set up a Virtual Environment
 
     First, navigate to the directory where you want to store the project:
 
-cd /path/to/your/project
+    cd /path/to/your/project
 
 Create a virtual environment:
 
-python3 -m venv venv
+    python3 -m venv venv
 
 Activate the virtual environment:
 
-    Linux/Mac:
+# Linux/Mac:
 
-source venv/bin/activate
+    source venv/bin/activate
 
 Windows:
 
@@ -46,7 +47,7 @@ Once your virtual environment is activated, install the necessary dependencies b
 #
 For verbose mode or additional libraries, you might want to install subprocess if not already available (typically built into Python, but worth mentioning if you're having issues).
 
-python ipcamdorking.py
+    python ipcamdorking.py
 
 It’s that simple. No need to hide the commands behind 50 lines of mangled variables. We respect your time.
 
