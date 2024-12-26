@@ -45,9 +45,11 @@ Once your virtual environment is activated, install the necessary dependencies b
     pip install requests beautifulsoup4 re time webbrowser json threading
 #
 For verbose mode or additional libraries, you might want to install subprocess if not already available (typically built into Python, but worth mentioning if you're having issues).
+
 python ipcamdorking.py
 
 It’s that simple. No need to hide the commands behind 50 lines of mangled variables. We respect your time.
+
 Verbose Mode
 
 Want to see what’s going on behind the scenes? Start the tool in verbose mode. We’ll open a new terminal tab for you to monitor what’s happening in real-time.
