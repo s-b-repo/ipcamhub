@@ -4,6 +4,7 @@ Introduction
 Welcome to the IP Camera Dorking Tool — the only tool you'll ever need to scour the internet for IP camera URLs using Google Dorks. But wait, there's more! This isn't just any tool. It's unobfuscated, easy-to-read, and transparent (just like your search for vulnerable IP cameras should be).
 
 Why obfuscate code when you can keep it clean, readable, and actually useful? If you're the type who obfuscates code for "security" reasons, then this tool probably isn't for you — unless you want to see a clear, understandable codebase and not one that looks like it was written in a secret language only decipherable by the most determined code detectives. But hey, we get it… obfuscating code makes you feel like a mysterious hacker. We see you.
+
 Features
 
     Google Dorking: Use advanced search queries to find vulnerable IP cameras.
