@@ -13,6 +13,7 @@ SAVE_FILE = 'results.json'
 RETRY_LIMIT = 3
 BACKOFF_FACTOR = 2
 RATE_LIMIT_SLEEP = 180  # 3 minutes
+TOO_MANY_REQUESTS_SLEEP = 60  # 1 minute
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
@@ -22,7 +23,23 @@ USER_AGENTS = [
 ]
 
 HEADERS = {'User-Agent': random.choice(USER_AGENTS)}
-rate_limited = False
+
+class RateLimiter:
+    def __init__(self):
+        self.rate_limited = False
+
+    def check_limit(self):
+        if self.rate_limited:
+            print("\033[91mRate limited! Pausing for 3 minutes...\033[0m")
+            time.sleep(RATE_LIMIT_SLEEP)
+            self.rate_limited = False
+
+    def set_limit(self, too_many_requests=False):
+        if too_many_requests:
+            print("\033[91mToo many requests! Pausing for 1 minute...\033[0m")
+            time.sleep(TOO_MANY_REQUESTS_SLEEP)
+        else:
+            self.rate_limited = True
 
 # Utility Functions
 def load_dorks(filename=DORK_FILE):
@@ -37,30 +54,26 @@ def load_dorks(filename=DORK_FILE):
         return []
 
 # Dork Searching
-def google_dork_search(dork, pages_to_view, result_queue):
-    global rate_limited
+def google_dork_search(dork, pages_to_view, result_queue, rate_limiter):
     try:
-        for page_num in range(pages_to_view):
-            if rate_limited:
-                print("Rate limited, pausing dorking...")
-                time.sleep(RATE_LIMIT_SLEEP)
-                continue
+        for page in range(pages_to_view):
+            rate_limiter.check_limit()
 
             for attempt in range(RETRY_LIMIT):
                 try:
-                    user_agent = random.choice(USER_AGENTS)
-                    search_results = search(
-                        dork, num_results=10, start=page_num * 10, user_agent=user_agent
-                    )
+                    search_results = search(dork, stop=10, lang="en", start=page * 10)
                     for url in search_results:
                         match = re.search(r'https?://(\d{1,3}\.(?:\d{1,3}\.){2}\d{1,3})', url)
                         if match:
                             result_queue.put(match.group(0))
-                    time.sleep(10)  # Delay between requests
+                    time.sleep(10)
                     break
                 except Exception as e:
-                    print(f"Error on dork {dork}, page {page_num + 1}: {e}")
-                    time.sleep(BACKOFF_FACTOR ** attempt)
+                    print(f"Error on dork {dork}, page {page + 1}: {e}")
+                    if "429 Too Many Requests" in str(e):
+                        rate_limiter.set_limit(too_many_requests=True)
+                    else:
+                        time.sleep(BACKOFF_FACTOR ** attempt)
     except Exception as e:
         print(f"Critical error in dork search: {e}")
 
@@ -122,14 +135,14 @@ def main():
         return
 
     result_queue = Queue()
-    results = {}
+    rate_limiter = RateLimiter()
 
     print("[+] Starting dork search...")
     with ThreadPoolExecutor() as executor:
         for dork in dorks:
-            executor.submit(google_dork_search, dork, 2, result_queue)
+            executor.submit(google_dork_search, dork, 10, result_queue, rate_limiter)
 
-    display_results(results, result_queue)
+    display_results({}, result_queue)
 
 if __name__ == "__main__":
     main()
